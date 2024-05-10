@@ -1,10 +1,33 @@
 package Vue;
 
+import Models.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author ASUS
  */
 public class Lecteur extends javax.swing.JFrame {
+
+    Connexion c = new Connexion();
+    Statement st;
+    PreparedStatement ps;
+
+    DefaultTableModel dtm = new DefaultTableModel();
+    DefaultTableModel dt = new DefaultTableModel();
+    DefaultTableModel dm = new DefaultTableModel();
+    public ResultSet rs;
+    ConnectionLecteurScientifique cp = new ConnectionLecteurScientifique();
+    ConnexionLecteurSportive ce = new ConnexionLecteurSportive();
+    ConnectionLecteuPolitique cs = new ConnectionLecteuPolitique();
 
     /**
      * Creates new form Lecteur
@@ -13,8 +36,147 @@ public class Lecteur extends javax.swing.JFrame {
         initComponents();
         setTitle("DzVue");
         setLocationRelativeTo(this);
-        
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //Scientifique-------------------------------------------------------------------------------------------
+        dtm.setColumnCount(0);
+        dtm.setRowCount(0);
+        try {
+            ps = c.getCo().prepareStatement("SELECT datePublication, format, titre, site, prix FROM revue where genre='scientifique'");
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        dtm.addColumn("Date Publication");
+        dtm.addColumn("Format");
+        dtm.addColumn("Titre");
+        dtm.addColumn("Site");
+        dtm.addColumn("Prix");
+        try {
+            while (cp.rs.next()) {
+                dtm.addRow(new Object[]{cp.rs.getString("datePublication"), cp.rs.getString("format"), cp.rs.getString("titre"), cp.rs.getString("site"), cp.rs.getFloat("prix")});
+
+            }
+            tscientifique.setModel(dtm);
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Politique-------------------------------------------------------------------------------
+        dt.setColumnCount(0);
+        dt.setRowCount(0);
+        try {
+            ps = c.getCo().prepareStatement("SELECT datePublication, format, titre, site, prix FROM revue where genre='politique'");
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        dt.addColumn("Date Publication");
+        dt.addColumn("Format");
+        dt.addColumn("Titre");
+        dt.addColumn("Site");
+        dt.addColumn("Prix");
+
+        try {
+            while (cs.rs.next()) {
+                dt.addRow(new Object[]{cs.rs.getString("datePublication"), cs.rs.getString("format"), cs.rs.getString("titre"), cs.rs.getString("site"), cs.rs.getFloat("prix")});
+
+            }
+            tpolitique.setModel(dt);
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //Sportive-------------------------------------------------------------------------------------------
+        dm.setColumnCount(0);
+        dm.setRowCount(0);
+        try {
+            ps = c.getCo().prepareStatement("SELECT datePublication, format, titre, site, prix FROM revue where genre='sportive'");
+            rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        dm.addColumn("Date Publication");
+        dm.addColumn("Format");
+        dm.addColumn("Titre");
+        dm.addColumn("Site");
+        dm.addColumn("Prix");
+
+        try {
+            while (ce.rs.next()) {
+                dm.addRow(new Object[]{ce.rs.getString("datePublication"), ce.rs.getString("format"), ce.rs.getString("titre"), ce.rs.getString("site"), ce.rs.getFloat("prix")});
+
+            }
+            tsportive.setModel(dm);
+        } catch (SQLException ex) {
+            Logger.getLogger(Panier.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
+
+    public void validerScientifique(int ligne) {
+        int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous Commander cette article?", "Commande", JOptionPane.YES_NO_OPTION);
+
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                ps = c.getCo().prepareStatement("INSERT INTO panier(nomrevue,prix)VALUES(?,?)");
+                ps.setString(1, tscientifique.getValueAt(ligne, 2) + "");
+                ps.setString(2, tscientifique.getValueAt(ligne, 4) + "");
+
+                ps.execute(); // ou executeupdate()
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Lecteur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
+        }
+    }
+
+    public void validerSportive(int ligne) {
+        int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous Commander cette article?", "Commande", JOptionPane.YES_NO_OPTION);
+
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                ps = c.getCo().prepareStatement("INSERT INTO panier(nomrevue,prix)VALUES(?,?)");
+                ps.setString(1, tsportive.getValueAt(ligne, 2) + "");
+                ps.setString(2, tsportive.getValueAt(ligne, 4) + "");
+
+                ps.execute(); //executeupdate()
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Lecteur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
+        }
+    }
+
+    public void validerpolitique(int ligne) {
+        int choice = JOptionPane.showConfirmDialog(null, "Voulez-vous Commander cette article?", "Commande", JOptionPane.YES_NO_OPTION);
+
+        if (choice == JOptionPane.YES_OPTION) {
+            try {
+                ps = c.getCo().prepareStatement("INSERT INTO panier(nomrevue,prix)VALUES(?,?)");
+                ps.setString(1, tpolitique.getValueAt(ligne, 2) + "");
+                ps.setFloat(2, Float.parseFloat(tpolitique.getValueAt(ligne, 4) + ""));
+
+                ps.execute(); // ou executeupdate()
+
+            } catch (SQLException ex) {
+                Logger.getLogger(Lecteur.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
+        }
+    }
+
+   
+
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,9 +192,6 @@ public class Lecteur extends javax.swing.JFrame {
         LOGO = new javax.swing.JLabel();
         navbar = new javax.swing.JLabel();
         llisterevue = new javax.swing.JLabel();
-        iconsearch = new javax.swing.JLabel();
-        iconeclearrecherche = new javax.swing.JLabel();
-        trecherche = new javax.swing.JTextField();
         pscientifique = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tscientifique = new javax.swing.JTable();
@@ -62,7 +221,12 @@ public class Lecteur extends javax.swing.JFrame {
         bcommande.setBackground(new java.awt.Color(69, 98, 78));
         bcommande.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         bcommande.setForeground(new java.awt.Color(216, 191, 159));
-        bcommande.setText("Commander");
+        bcommande.setText("Panier");
+        bcommande.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcommandeActionPerformed(evt);
+            }
+        });
         getContentPane().add(bcommande, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 20, 110, 30));
 
         LOGO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/logo-vertmin.png"))); // NOI18N
@@ -74,22 +238,7 @@ public class Lecteur extends javax.swing.JFrame {
         llisterevue.setFont(new java.awt.Font("Trebuchet MS", 1, 26)); // NOI18N
         llisterevue.setForeground(new java.awt.Color(240, 240, 240));
         llisterevue.setText("Listes De  Revues :");
-        getContentPane().add(llisterevue, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, -1));
-
-        iconsearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons search.png"))); // NOI18N
-        getContentPane().add(iconsearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 90, 30, 30));
-
-        iconeclearrecherche.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/iconsX.png"))); // NOI18N
-        getContentPane().add(iconeclearrecherche, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 90, 30, 30));
-
-        trecherche.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        trecherche.setText("          ");
-        trecherche.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                trechercheActionPerformed(evt);
-            }
-        });
-        getContentPane().add(trecherche, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 90, 280, 30));
+        getContentPane().add(llisterevue, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 90, -1, -1));
 
         pscientifique.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Scientifique :", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 1, 18), new java.awt.Color(255, 255, 255))); // NOI18N
         pscientifique.setForeground(new java.awt.Color(255, 255, 255));
@@ -109,6 +258,11 @@ public class Lecteur extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tscientifique.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tscientifiqueMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tscientifique);
 
         pscientifique.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 860, 100));
@@ -132,6 +286,11 @@ public class Lecteur extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tpolitique.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tpolitiqueMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tpolitique);
 
         ppolitique.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 860, 110));
@@ -155,6 +314,11 @@ public class Lecteur extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tsportive.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tsportiveMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tsportive);
 
         psportive.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, 860, 110));
@@ -165,6 +329,11 @@ public class Lecteur extends javax.swing.JFrame {
         bdeconnection.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         bdeconnection.setForeground(new java.awt.Color(216, 191, 159));
         bdeconnection.setText("Se deconnecter");
+        bdeconnection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bdeconnectionActionPerformed(evt);
+            }
+        });
         getContentPane().add(bdeconnection, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 643, -1, 30));
 
         fond.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/Font verte.png"))); // NOI18N
@@ -172,10 +341,6 @@ public class Lecteur extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void trechercheActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trechercheActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_trechercheActionPerformed
 
     private void babonneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_babonneActionPerformed
         Sabonner sign = new Sabonner();
@@ -185,6 +350,34 @@ public class Lecteur extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_babonneActionPerformed
 
+    private void bdeconnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdeconnectionActionPerformed
+        this.setVisible(false);
+        MC login = new MC();
+        login.setVisible(true);
+        login.pack();
+        login.setLocationRelativeTo(null);
+    }//GEN-LAST:event_bdeconnectionActionPerformed
+
+    private void bcommandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcommandeActionPerformed
+        this.setVisible(false);
+        Panier p = new Panier();
+        p.setVisible(true);
+        p.pack();
+        p.setLocationRelativeTo(null);
+    }//GEN-LAST:event_bcommandeActionPerformed
+
+    private void tscientifiqueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tscientifiqueMouseClicked
+        validerScientifique(tscientifique.getSelectedRow());
+    }//GEN-LAST:event_tscientifiqueMouseClicked
+
+    private void tpolitiqueMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tpolitiqueMouseClicked
+        validerpolitique(tpolitique.getSelectedRow());
+    }//GEN-LAST:event_tpolitiqueMouseClicked
+
+    private void tsportiveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tsportiveMouseClicked
+        validerSportive(tsportive.getSelectedRow());
+    }//GEN-LAST:event_tsportiveMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel LOGO;
@@ -192,8 +385,6 @@ public class Lecteur extends javax.swing.JFrame {
     private javax.swing.JButton bcommande;
     private javax.swing.JButton bdeconnection;
     private javax.swing.JLabel fond;
-    private javax.swing.JLabel iconeclearrecherche;
-    private javax.swing.JLabel iconsearch;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -203,8 +394,8 @@ public class Lecteur extends javax.swing.JFrame {
     private javax.swing.JPanel pscientifique;
     private javax.swing.JPanel psportive;
     private javax.swing.JTable tpolitique;
-    private javax.swing.JTextField trecherche;
     private javax.swing.JTable tscientifique;
     private javax.swing.JTable tsportive;
     // End of variables declaration//GEN-END:variables
+
 }

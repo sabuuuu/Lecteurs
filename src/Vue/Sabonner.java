@@ -3,14 +3,30 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Vue;
+
+import Beans.*;
+import Models.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author NIS
  */
 public class Sabonner extends javax.swing.JFrame {
+
+    Connexion c = new Connexion();
+    Statement st;
+    PreparedStatement ps;
+    ResultSet rs;
+    DefaultTableModel dt = new DefaultTableModel();
 
     /**
      * Creates new form Sabonner
@@ -34,11 +50,11 @@ public class Sabonner extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        tcarte = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         button1 = new java.awt.Button();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        tcvv = new javax.swing.JPasswordField();
         navbar = new javax.swing.JPanel();
         jaipasdecompte = new javax.swing.JLabel();
 
@@ -49,106 +65,64 @@ public class Sabonner extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(235, 222, 212));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(20, 49, 9));
         jLabel2.setText("Souhaitez vous vous");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(71, 32, 286, 27));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(20, 49, 9));
         jLabel3.setText("abonner ?");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 65, 219, 27));
 
         jLabel1.setBackground(new java.awt.Color(69, 98, 78));
         jLabel1.setForeground(new java.awt.Color(69, 98, 78));
         jLabel1.setText("Abonnement a 500 DA/mois , bénéficiez de 10% de réduction  ");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 110, -1, -1));
 
         jLabel4.setBackground(new java.awt.Color(69, 98, 78));
         jLabel4.setForeground(new java.awt.Color(69, 98, 78));
         jLabel4.setText("lors de vos commandes !");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 130, -1, -1));
 
-        jTextField1.setBackground(new java.awt.Color(227, 202, 171));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        tcarte.setBackground(new java.awt.Color(227, 202, 171));
+        tcarte.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                tcarteActionPerformed(evt);
             }
         });
+        jPanel1.add(tcarte, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 201, 300, 42));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(69, 98, 78));
         jLabel5.setText("Numéro de carte EDAHABIA");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 180, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(69, 98, 78));
         jLabel6.setText("Code CVV");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 262, -1, -1));
 
         button1.setBackground(new java.awt.Color(20, 49, 9));
         button1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         button1.setForeground(new java.awt.Color(255, 255, 255));
         button1.setLabel("Je m'abonne");
+        button1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(button1, new org.netbeans.lib.awtextra.AbsoluteConstraints(91, 360, 189, 36));
 
-        jPasswordField1.setBackground(new java.awt.Color(227, 202, 171));
-        jPasswordField1.setText("jPasswordField1");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(114, 114, 114)
-                                .addComponent(jLabel4)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(14, 14, 14))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(88, 88, 88)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(36, 36, 36)
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21))
-        );
+        tcvv.setBackground(new java.awt.Color(227, 202, 171));
+        tcvv.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tcvvActionPerformed(evt);
+            }
+        });
+        jPanel1.add(tcvv, new org.netbeans.lib.awtextra.AbsoluteConstraints(37, 283, 300, 41));
 
         background.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 370, 420));
 
@@ -188,9 +162,35 @@ public class Sabonner extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void tcarteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tcarteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_tcarteActionPerformed
+
+    private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        String carte = tcarte.getText();
+        int cvv=Integer.parseInt(tcvv.getText());
+        Lecteurs lec = new Lecteurs();
+        try {
+            st = c.getCo().createStatement();
+            st.executeUpdate("UPDATE lecteur SET abonne = 1, carteBancaire = '" + carte + "',cvv ='"+cvv+"'WHERE email = '" + MC.temail.getText() + "'");
+
+            JOptionPane.showMessageDialog(this, "Félicitations Vous êtes abonné ");
+            Abonne a = new Abonne();
+            a.setVisible(true);
+            a.pack();
+            a.setLocationRelativeTo(null);
+            this.dispose();
+            //actualiser();
+            //reinistialiser();
+        } catch (SQLException ex) {
+            Logger.getLogger(Lecteurs.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_button1ActionPerformed
+
+    private void tcvvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tcvvActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tcvvActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,9 +237,9 @@ public class Sabonner extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jaipasdecompte;
     private javax.swing.JPanel navbar;
+    public static javax.swing.JTextField tcarte;
+    private javax.swing.JPasswordField tcvv;
     // End of variables declaration//GEN-END:variables
 }

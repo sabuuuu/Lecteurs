@@ -1,5 +1,14 @@
 package Vue;
 
+import Models.*;
+import Beans.*;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 public class MC extends javax.swing.JFrame {
 
     /**
@@ -7,6 +16,7 @@ public class MC extends javax.swing.JFrame {
      */
     public MC() {
         initComponents();
+         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -21,61 +31,63 @@ public class MC extends javax.swing.JFrame {
         background = new javax.swing.JPanel();
         panelconnex = new javax.swing.JPanel();
         connexionlabel = new javax.swing.JLabel();
-        emailtxt = new javax.swing.JTextField();
-        mdptxt = new javax.swing.JTextField();
         emaillab = new javax.swing.JLabel();
         mdplab = new javax.swing.JLabel();
-        btnconnex = new java.awt.Button();
+        bconnection = new java.awt.Button();
         jaipasdecompte = new javax.swing.JLabel();
         rediriger_inscription = new javax.swing.JButton();
+        jpassword = new javax.swing.JPasswordField();
+        temail = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         background.setBackground(new java.awt.Color(20, 49, 9));
         background.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panelconnex.setBackground(new java.awt.Color(227, 202, 171));
+        panelconnex.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         connexionlabel.setBackground(new java.awt.Color(255, 255, 255));
         connexionlabel.setFont(new java.awt.Font("Verdana", 1, 24)); // NOI18N
         connexionlabel.setForeground(new java.awt.Color(69, 98, 78));
         connexionlabel.setText("Connexion");
         connexionlabel.setMaximumSize(new java.awt.Dimension(51, 18));
-
-        emailtxt.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                emailtxtActionPerformed(evt);
-            }
-        });
+        panelconnex.add(connexionlabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 30, -1, -1));
 
         emaillab.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         emaillab.setForeground(new java.awt.Color(69, 98, 78));
         emaillab.setText("E-mail");
         emaillab.setToolTipText("");
+        panelconnex.add(emaillab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 101, -1, -1));
 
         mdplab.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         mdplab.setForeground(new java.awt.Color(69, 98, 78));
         mdplab.setText("Mot de passe");
+        panelconnex.add(mdplab, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, -1, -1));
 
-        btnconnex.setActionCommand("Connexion");
-        btnconnex.setBackground(new java.awt.Color(20, 49, 9));
-        btnconnex.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        btnconnex.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
-        btnconnex.setForeground(new java.awt.Color(255, 255, 255));
-        btnconnex.setLabel("Se connecter\n");
-        btnconnex.addActionListener(new java.awt.event.ActionListener() {
+        bconnection.setActionCommand("Connexion");
+        bconnection.setBackground(new java.awt.Color(20, 49, 9));
+        bconnection.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        bconnection.setFont(new java.awt.Font("Microsoft YaHei UI", 1, 14)); // NOI18N
+        bconnection.setForeground(new java.awt.Color(255, 255, 255));
+        bconnection.setLabel("Se connecter\n");
+        bconnection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnconnexActionPerformed(evt);
+                bconnectionActionPerformed(evt);
             }
         });
+        panelconnex.add(bconnection, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 290, 177, 40));
+        bconnection.getAccessibleContext().setAccessibleName("Se connecter");
 
         jaipasdecompte.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
         jaipasdecompte.setForeground(new java.awt.Color(255, 255, 255));
         jaipasdecompte.setText("Je n'ai pas de compte ?");
+        panelconnex.add(jaipasdecompte, new org.netbeans.lib.awtextra.AbsoluteConstraints(62, 352, -1, -1));
 
         rediriger_inscription.setBackground(new java.awt.Color(227, 202, 171));
         rediriger_inscription.setFont(new java.awt.Font("Tahoma", 1, 10)); // NOI18N
@@ -88,57 +100,13 @@ public class MC extends javax.swing.JFrame {
                 rediriger_inscriptionActionPerformed(evt);
             }
         });
+        panelconnex.add(rediriger_inscription, new org.netbeans.lib.awtextra.AbsoluteConstraints(186, 352, -1, -1));
 
-        javax.swing.GroupLayout panelconnexLayout = new javax.swing.GroupLayout(panelconnex);
-        panelconnex.setLayout(panelconnexLayout);
-        panelconnexLayout.setHorizontalGroup(
-            panelconnexLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelconnexLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(jaipasdecompte)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rediriger_inscription)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelconnexLayout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
-                .addGroup(panelconnexLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelconnexLayout.createSequentialGroup()
-                        .addGroup(panelconnexLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(emaillab)
-                            .addComponent(mdplab)
-                            .addComponent(emailtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(mdptxt, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelconnexLayout.createSequentialGroup()
-                        .addComponent(connexionlabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(93, 93, 93))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelconnexLayout.createSequentialGroup()
-                        .addComponent(btnconnex, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73))))
-        );
-        panelconnexLayout.setVerticalGroup(
-            panelconnexLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelconnexLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(connexionlabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
-                .addComponent(emaillab)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(emailtxt, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(mdplab)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mdptxt, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(btnconnex, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addGroup(panelconnexLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jaipasdecompte)
-                    .addComponent(rediriger_inscription))
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
+        jpassword.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        panelconnex.add(jpassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 220, 290, 39));
 
-        btnconnex.getAccessibleContext().setAccessibleName("Se connecter");
+        temail.setMargin(new java.awt.Insets(2, 6, 2, 6));
+        panelconnex.add(temail, new org.netbeans.lib.awtextra.AbsoluteConstraints(25, 130, 290, 39));
 
         background.add(panelconnex, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 40, 330, 410));
 
@@ -150,7 +118,7 @@ public class MC extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 38)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Soyez les bienvenues");
-        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 530, 60));
+        background.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, 420, 60));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/akh2.png"))); // NOI18N
         background.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 350, 160));
@@ -160,20 +128,52 @@ public class MC extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void emailtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailtxtActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_emailtxtActionPerformed
+    private void bconnectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bconnectionActionPerformed
+        ConnexionLecteurs cu = new ConnexionLecteurs();
+        boolean trouve = false;
+        String email = temail.getText();
+        String password = new String(jpassword.getPassword());
 
-    private void btnconnexActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnconnexActionPerformed
-        Lecteur sign = new Lecteur();
-        sign.setVisible(true);
-        sign.pack();
-        sign.setLocationRelativeTo(null);
-        this.dispose();
-    }//GEN-LAST:event_btnconnexActionPerformed
+        // Regex pattern for email validation
+        String emailRegex = "^[a-zA-Z0-9+._-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,7}$";
+
+        // Regex pattern for password validation (minimum 8 caractères et au moins un chiffre)
+        String passwordRegex = "^(?=.*[0-9]).{8,}$";
+
+        // Vérifie si l'email correspond au motif regex
+        if (!email.matches(emailRegex)) {
+            JOptionPane.showMessageDialog(null, "Adresse e-mail invalide !");
+            return;
+        }
+
+// Vérifie si le mot de passe correspond au motif regex
+        if (!password.matches(passwordRegex)) {
+            JOptionPane.showMessageDialog(null, "Mot de passe invalide ! \nLe mot de passe doit contenir au moins 8 caractères, \ndont au moins un chiffre.");
+            return;
+        }
+        try {
+            while (cu.rs.next()) {
+                if (temail.getText().equals(cu.rs.getString("email")) && jpassword.getText().equals(cu.rs.getString("mdp"))) {
+                    trouve = true;
+                    break;
+                }
+
+            }
+            if (trouve) {
+                new Lecteur().setVisible(true);
+                this.setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(this, "Email ou mot de passe incorrecte", "erreur", JOptionPane.WARNING_MESSAGE);
+                temail.setText(null);
+                jpassword.setText(null);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MC.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_bconnectionActionPerformed
 
     private void rediriger_inscriptionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rediriger_inscriptionActionPerformed
-        inscription sign = new inscription();
+        Inscription sign = new Inscription();
         sign.setVisible(true);
         sign.pack();
         sign.setLocationRelativeTo(null);
@@ -183,17 +183,17 @@ public class MC extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel background;
-    private java.awt.Button btnconnex;
+    private java.awt.Button bconnection;
     private javax.swing.JLabel connexionlabel;
     private javax.swing.JLabel emaillab;
-    private javax.swing.JTextField emailtxt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jaipasdecompte;
+    public static javax.swing.JPasswordField jpassword;
     private javax.swing.JLabel mdplab;
-    private javax.swing.JTextField mdptxt;
     private javax.swing.JPanel panelconnex;
     private javax.swing.JButton rediriger_inscription;
+    public static javax.swing.JTextField temail;
     // End of variables declaration//GEN-END:variables
 }
