@@ -265,6 +265,7 @@ public class Inscription extends javax.swing.JFrame {
         login.setVisible(true);
         login.pack();
         login.setLocationRelativeTo(null);
+        this.dispose();
     }//GEN-LAST:event_rediriger_connexionActionPerformed
 
     /**

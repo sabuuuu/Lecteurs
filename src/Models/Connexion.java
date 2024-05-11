@@ -15,7 +15,7 @@ public class Connexion {
     Connection co;
     public Connexion() {
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
            // JOptionPane.showMessageDialog(null, "connexion au serveur faite avec succées");
 
         } catch (Exception e) {
@@ -23,7 +23,7 @@ public class Connexion {
         }
 
         try {
-            co = DriverManager.getConnection("jdbc:mysql://localhost:3306/dzvues", "root", "");
+            co = DriverManager.getConnection("jdbc:mysql://localhost:3308/dzvues", "root", "");
           //  JOptionPane.showMessageDialog(null, "connexion a la bdd faite avec succées");
 
         } catch (Exception e) {
